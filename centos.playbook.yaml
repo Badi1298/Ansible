@@ -1,0 +1,42 @@
+- name: Nginx
+  hosts: centos
+  vars_files:
+    vars/logos.yaml
+  tasks:
+    - name: Install EPEL repository
+      ansible.builtin.dnf:
+        name:
+          - epel-release
+        state: latest
+        update_cache: true
+        update_only: true
+      when: ansible_facts['distribution'] == "CentOS"
+    - name: Install Nginx
+      ansible.builtin.package:
+        name: nginx
+        state: present
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+    - name: Intall Unzip
+      ansible.builtin.package:
+        name: unzip
+        state: latest
+    - name: Unarchive playbook stacker game
+      ansible.builtin.unarchive:
+        src: files/playbook_stacker.zip
+        dest: "{{ nginx_root_location }}"
+        mode: "0755"
+      notify: Check HTTP Service
+    - name: Jinja2 HTML Template
+      ansible.builtin.template:
+        src: templates/index.html-easter_egg.j2
+        dest: "{{ nginx_root_location }}/index.html"
+        mode: "0644"
+  handlers:
+    - name: Check HTTP Service
+      ansible.builtin.uri:
+        url: http://{{ ansible_default_ipv4.address }}
+        status_code:
+          - 200

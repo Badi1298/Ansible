@@ -1,0 +1,7 @@
+- name: Fetch redhat-release
+  hosts: centos
+  tasks:
+    - name: Fetch centos redhat-release
+      ansible.builtin.fetch:
+        src: /etc/redhat-release
+        dest: /tmp/redhat-release

@@ -1,0 +1,8 @@
+- name: Assemble playbook
+  hosts: centos3,ubuntu3
+  tasks:
+    - name: Assemble final sshd_config
+      ansible.builtin.assemble:
+        src: conf.d/
+        dest: sshd_config
+        mode: "0744"

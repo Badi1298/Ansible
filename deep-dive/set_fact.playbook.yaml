@@ -1,0 +1,12 @@
+- name: Set fact module
+  hosts: centos3,ubuntu3
+  tasks:
+    - name: Set fact
+      ansible.builtin.set_fact:
+        ansible_custom_fact: Ansible Rocks!
+        ansible_distribution: "{{ ansible_distribution | upper }}"
+    - name: Show fact
+      ansible.builtin.debug:
+        msg: 
+          - "{{ ansible_distribution }}"
+          - "{{ ansible_custom_fact }}"

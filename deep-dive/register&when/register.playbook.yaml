@@ -1,0 +1,10 @@
+- name: Register command output
+  hosts: all
+  tasks:
+    - name: Show hostname
+      ansible.builtin.command: hostname -s
+      register: hostname_output
+      changed_when: hostname_output != ''
+    - name: Show hostname output
+      ansible.builtin.debug:
+        var: hostname_output.stdout

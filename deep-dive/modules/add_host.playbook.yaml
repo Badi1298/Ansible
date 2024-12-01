@@ -1,0 +1,14 @@
+- name: Create host groups
+  hosts: ubuntu-c
+  tasks:
+    - name: Create groups
+      ansible.builtin.add_host:
+        name: centos1
+        groups:
+          - adhoc_group1
+          - adhoc_group2
+- name: Ping group
+  hosts: adhoc_group1
+  tasks:
+    - name: Ping groupd adhoc_group1
+      ansible.builtin.ping:

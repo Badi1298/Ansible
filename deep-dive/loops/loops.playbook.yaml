@@ -13,13 +13,20 @@
       notify: MOTD changed
     - name: Add users
       ansible.builtin.user:
-        name: "{{ item.key }}"
-        comment: "{{ item.value.full_name }}"
-      with_dict:
-        john:
-          full_name: John Doe
-        bob:
-          full_name: Bob the Builder
+        name: "{{ item.1 }}"
+        comment: "{{ item.1 | title }} {{ item.0.surname }}"
+        password: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,hexdigits,punctuation') | password_hash('sha512') }}"
+      with_subelements:
+        -
+          - surname: Pog
+            members:
+              - bob
+              - john
+              - karl
+          - surname: Champ
+            members:
+              - jim
+        - members
   handlers:
     - name: MOTD changed
       ansible.builtin.debug:

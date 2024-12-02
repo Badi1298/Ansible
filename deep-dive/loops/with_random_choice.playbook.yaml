@@ -1,0 +1,13 @@
+- name: Looping
+  hosts: linux
+  tasks:
+    - name: Create sequence directories
+      ansible.builtin.file:
+        dest: /home/james/{{ item }}
+        state: directory
+        mode: "0774"
+      with_random_choice:
+        - "google"
+        - "amazon"
+        - "microsoft"
+        - "s&p global"

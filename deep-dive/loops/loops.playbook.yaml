@@ -13,11 +13,13 @@
       notify: MOTD changed
     - name: Add users
       ansible.builtin.user:
-        name: "{{ item }}"
-      with_items:
-        - John
-        - Bob
-        - Karl
+        name: "{{ item.key }}"
+        comment: "{{ item.value.full_name }}"
+      with_dict:
+        john:
+          full_name: John Doe
+        bob:
+          full_name: Bob the Builder
   handlers:
     - name: MOTD changed
       ansible.builtin.debug:

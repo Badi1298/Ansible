@@ -1,0 +1,9 @@
+- name: Looping
+  hosts: linux
+  tasks:
+    - name: Run script until you hit 10
+      ansible.builtin.script: random.sh
+      retries: 100
+      register: result
+      until: result.stdout.find("10") != -1
+      delay: 1

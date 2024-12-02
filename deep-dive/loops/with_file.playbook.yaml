@@ -1,0 +1,10 @@
+- name: Looping
+  hosts: linux
+  tasks:
+    - name: Add authorized keys
+      authorized_key:
+        user: james
+        key: "{{ item }}"
+      with_file:
+        - /home/ansible/.ssh/id_rsa.pub
+        - custom_key.pub   

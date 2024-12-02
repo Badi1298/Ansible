@@ -1,0 +1,33 @@
+---
+- name: Serial
+  hosts: linux
+  gather_facts: false
+  serial:
+    - 1
+    - 2
+    - 3
+  # serial:
+  #   - 16%
+  #   - 34%
+  #   - 50%
+
+  tasks:
+    - name: Task 1
+      ansible.builtin.command: /bin/sleep 1
+      changed_when: ansible_hostname != ''
+    - name: Task 2
+      ansible.builtin.command: /bin/sleep 1
+      changed_when: ansible_hostname != ''
+    - name: Task 3
+      ansible.builtin.command: /bin/sleep 1
+      changed_when: ansible_hostname != ''
+    - name: Task 4
+      ansible.builtin.command: /bin/sleep 1
+      changed_when: ansible_hostname != ''
+    - name: Task 5
+      ansible.builtin.command: /bin/sleep 1
+      changed_when: ansible_hostname != ''
+    - name: Task 6
+      ansible.builtin.command: /bin/sleep 1
+      changed_when: ansible_hostname != ''
+...

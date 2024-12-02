@@ -1,0 +1,21 @@
+- name: Register command output
+  hosts: linux
+  tasks:
+    - name: Show CentOS Hostname
+      ansible.builtin.command: hostname -s
+      changed_when: ansible_distribution != ""
+      when:
+        - ansible_distribution == "CentOS"
+        - ansible_distribution_major_version | int >= 8
+      register: command_register
+    - name: Install Patch with Yum for CentOS base on the register changed state
+      yum:
+        name: patch
+        state: present
+      when: command_register is changed
+    - name: Install Path with Apt for Ubuntu based on the register skipped state
+      ansible.builtin.apt:
+        name:
+          - patch
+        state: present
+      when: command_register is skipped

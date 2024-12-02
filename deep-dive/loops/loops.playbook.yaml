@@ -1,0 +1,24 @@
+- name: Looping
+  hosts: linux
+  tasks:
+    - name: Use with_items
+      ansible.builtin.copy:
+        content: Welcome to {{ item }} Linux - Ansible Rocks!
+        dest: /etc/motd
+        mode: "0644"
+      with_items:
+        - CentOS
+        - Ubuntu
+      when: ansible_distribution == item
+      notify: MOTD changed
+    - name: Add users
+      ansible.builtin.user:
+        name: "{{ item }}"
+      with_items:
+        - John
+        - Bob
+        - Karl
+  handlers:
+    - name: MOTD changed
+      ansible.builtin.debug:
+        msg: MOTD has changed

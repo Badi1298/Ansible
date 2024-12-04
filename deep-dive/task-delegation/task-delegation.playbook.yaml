@@ -1,6 +1,21 @@
+---
 - name: Generate SSH
   hosts: ubuntu-c
   tasks:
     - name: Generate SSH key for ubuntu3
       ansible.builtin.openssh_keypair:
         path: ~/.ssh/ubuntu3_id_rsa
+
+- name: Copy ssh
+  hosts: linux
+  tasks:
+    - name: Copy SSH key with permissions
+      ansible.builtin.copy:
+        owner: root
+        src: "{{ item.0 }}"
+        dest: "{{ item.0 }}"
+        mode: "{{ item.1 }}"
+      with_items: 
+        - [~/.ssh/ubuntu3_id_rsa, ~/.ssh/ubuntu3_id_rsa.pub]
+        - ["0600", "0644"]
+...

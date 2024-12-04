@@ -1,0 +1,6 @@
+- name: Generate SSH
+  hosts: ubuntu-c
+  tasks:
+    - name: Generate SSH key for ubuntu3
+      ansible.builtin.openssh_keypair:
+        path: ~/.ssh/ubuntu3_id_rsa

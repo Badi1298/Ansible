@@ -34,4 +34,23 @@
       ansible.builtin.command:
         ssh -i ~/.ssh/ubuntu3_id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@ubuntu3 date
       changed_when: false
+
+- name: Add host to /etc/hosts.allow for sshd
+  hosts: ubuntu-c, ubuntu1, centos1
+  tasks:
+    - name: Add host
+      ansible.builtin.lineinfile:
+        path: /etc/hosts.allow
+        line: "sshd: {{ ansible_hostname }}.diveinto.io"
+        create: true
+        mode: "0644"
+      delegate_to: ubuntu3
+
+- name: Check SSH connectivity
+  hosts: all
+  tasks:
+    - name: Check SSH connectivity
+      ansible.builtin.command:
+        ssh -i ~/.ssh/ubuntu3_id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@ubuntu3 date
+      changed_when: false
 ...

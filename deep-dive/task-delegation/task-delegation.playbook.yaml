@@ -26,4 +26,12 @@
       ansible.posix.authorized_key:
         user: root
         key: "{{ lookup('file', '~/.ssh/ubuntu3_id_rsa.pub') }}"
+
+- name: Check SSH connectivity
+  hosts: all
+  tasks:
+    - name: Check SSH connectivity
+      ansible.builtin.command:
+        ssh -i ~/.ssh/ubuntu3_id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@ubuntu3 date
+      changed_when: false
 ...

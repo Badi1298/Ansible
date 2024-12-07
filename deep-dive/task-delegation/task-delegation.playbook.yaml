@@ -1,13 +1,13 @@
 ---
-- name: Generate SSH
+- name: Generate SSH private + public keys
   hosts: ubuntu-c
   tasks:
     - name: Generate SSH key for ubuntu3
-      ansible.builtin.openssh_keypair:
+      community.crypto.openssh_keypair:
         path: ~/.ssh/ubuntu3_id_rsa
 
-- name: Copy ssh
-  hosts: linux
+- name: Copy SSH keys into linux group
+  hosts: ubuntu3
   tasks:
     - name: Copy SSH key with permissions
       ansible.builtin.copy:
@@ -15,7 +15,15 @@
         src: "{{ item.0 }}"
         dest: "{{ item.0 }}"
         mode: "{{ item.1 }}"
-      with_items: 
+      with_together:
         - [~/.ssh/ubuntu3_id_rsa, ~/.ssh/ubuntu3_id_rsa.pub]
         - ["0600", "0644"]
+
+- name: Add public key to Ubuntu3 authorized_keys
+  hosts: ubuntu3
+  tasks:
+    - name: Add authorized key
+      ansible.posix.authorized_key:
+        user: root
+        key: "{{ lookup('file', '~/.ssh/ubuntu3_id_rsa.pub') }}"
 ...

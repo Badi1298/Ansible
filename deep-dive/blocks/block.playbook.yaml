@@ -1,0 +1,46 @@
+- name: Blocks
+  hosts: linux
+  tasks:
+    - name: Block of tasks
+      block:
+        - name: First debug
+          ansible.builtin.debug:
+            msg: 'Wow this is the first block task that only runs for Centos.'
+          when: ansible_distribution == 'CentOS'
+
+        - name: Second debug
+          ansible.builtin.debug:
+            msg: 'Wow this is the second block task that only runs for Ubuntu.'
+          when: ansible_distribution == 'Ubuntu'
+
+        - name: Third debug
+          ansible.builtin.debug:
+            msg: 'Wow this is the third block task that runs for the entire Linux group {{ item }}.'
+          with_items:
+            - 'very'
+            - 'cool'
+            - 'wow'
+
+    - name: Block Rescue Always
+      block:
+        - name: Install Patch
+          ansible.builtin.package:
+            name: patch
+        - name: Install python3-dnspython
+          ansible.builtin.package:
+            name: python3-dnspython
+
+      rescue:
+        - name: Clear Patch
+          ansible.builtin.package:
+            name: patch
+            state: absent
+        - name: Clear python3-dnspython
+          ansible.builtin.package:
+            name: python3-dnspython
+            state: absent
+
+      always:
+        - name: Always runs
+          ansible.builtin.debug:
+            msg: 'This always shows'

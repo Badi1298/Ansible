@@ -1,0 +1,19 @@
+- name: Dump magic vars
+  hosts: all
+  tasks:
+    - name: Generate magic vars from Jinja2 template
+      ansible.builtin.template:
+        src: templates/dump_variables
+        dest: /tmp/ansible_variables
+        mode: "0644"
+
+    - name: Fetch variables from each system
+      ansible.builtin.fetch:
+        src: /tmp/ansible_variables
+        dest: "captured_variables/{{ ansible_hostname }}"
+        flat: true
+
+    - name: Cleanup variables
+      ansible.builtin.file:
+        path: /tmp/ansible_variables
+        state: absent

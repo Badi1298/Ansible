@@ -1,0 +1,9 @@
+- name: Set Fact
+  ansible.builtin.set_fact:
+    include_var: foo
+- name: Debug 1
+  ansible.builtin.debug:
+    msg: 'Wow this is a debug'
+- name: Debug 1
+  ansible.builtin.debug:
+    msg: 'Wow this is a debug'

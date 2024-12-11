@@ -1,0 +1,18 @@
+- name: Include vs Import
+  hosts: ubuntu1
+  tasks:
+    - name: Testing Include
+      ansible.builtin.debug:
+        msg: '==========TESTING INCLUDE=========='
+    - name: Include
+      ansible.builtin.import_tasks:
+        file: include_task.yaml
+      when: include_var is not defined
+
+    - name: Testing Import
+      ansible.builtin.debug:
+        msg: '==========TESTING IMPORT=========='
+    - name: Import
+      ansible.builtin.import_tasks:
+        file: import_task.yaml
+      when: import_var is not defined

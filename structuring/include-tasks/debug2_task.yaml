@@ -1,0 +1,3 @@
+- name: Debug 2
+  ansible.builtin.debug:
+    msg: 'Wow this is the second debug'

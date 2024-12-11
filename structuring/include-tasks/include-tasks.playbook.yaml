@@ -1,0 +1,9 @@
+- name: Include tasks
+  hosts: ubuntu1
+  tasks:
+    - name: Debug 1
+      ansible.builtin.debug:
+        msg: 'Wow such a nice debug 1'
+    - name: Import debug 2
+      ansible.builtin.include_tasks:
+        file: debug2_task.yaml

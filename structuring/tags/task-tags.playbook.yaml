@@ -19,7 +19,7 @@
         state: restarted
       notify: Check HTTP Service
       tags:
-        - restart-nginx
+        - always
     - name: Copy Vue3 app files
       ansible.builtin.copy:
         src: "{{ dist_src }}"

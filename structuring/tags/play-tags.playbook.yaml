@@ -1,0 +1,54 @@
+- name: Nginx
+  hosts: ubuntu
+  tags: webapp
+  vars:
+    app_name: your-app
+    nginx_conf_src: ./your-app.conf
+    nginx_conf_dest: /etc/nginx/sites-available/{{ app_name }}.conf
+    dist_src: ./dist/
+    dist_dest: /var/www/html
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.package:
+        name: nginx
+        state: present
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+      notify: Check HTTP Service
+    - name: Copy Vue3 app files
+      ansible.builtin.copy:
+        src: "{{ dist_src }}"
+        dest: "{{ dist_dest }}"
+        owner: www-data
+        group: www-data
+        mode: '0644'
+    - name: Upload Nginx configuration
+      ansible.builtin.copy:
+        src: "{{ nginx_conf_src }}"
+        dest: "{{ nginx_conf_dest }}"
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Enable the Nginx site
+      ansible.builtin.file:
+        src: "{{ nginx_conf_dest }}"
+        dest: "/etc/nginx/sites-enabled/{{ app_name }}.conf"
+        state: link
+    - name: Test Nginx configuration
+      ansible.builtin.command: nginx -t
+      register: nginx_test
+      failed_when: nginx_test.rc != 0
+      changed_when: false
+      notify: Reload nginx
+  handlers:
+    - name: Check HTTP Service
+      ansible.builtin.uri:
+        url: http://{{ ansible_default_ipv4.address }}
+        status_code:
+          - 200
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

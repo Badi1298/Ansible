@@ -1,0 +1,20 @@
+- name: Include vs Import
+  hosts: ubuntu1
+  tasks:
+    - name: Testing Include
+      ansible.builtin.debug:
+        msg: '==========TESTING INCLUDE=========='
+    - name: Include
+      ansible.builtin.include_tasks:
+        file: include_task.yaml
+      tags:
+        - include_tag
+
+    - name: Testing Import
+      ansible.builtin.debug:
+        msg: '==========TESTING IMPORT=========='
+    - name: Import
+      ansible.builtin.import_tasks:
+        file: import_task.yaml
+      tags:
+        - import_tag

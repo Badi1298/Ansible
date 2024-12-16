@@ -1,3 +1,13 @@
 # SPDX-License-Identifier: MIT-0
 ---
 # handlers file for nginx
+- name: Check HTTP Service
+  ansible.builtin.uri:
+    url: http://{{ ansible_default_ipv4.address }}
+    status_code:
+      - 200
+- name: Reload nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+...

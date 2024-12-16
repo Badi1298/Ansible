@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for webapp
+- name: Copy Vue3 app files
+  ansible.builtin.copy:
+    src: "{{ webapp_dist_src }}"
+    dest: "{{ webapp_dist_dest }}"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+...

@@ -1,3 +1,7 @@
 # SPDX-License-Identifier: MIT-0
 ---
 # vars file for nginx
+nginx_app_name: your-app
+nginx_conf_src: ./your-app.conf
+nginx_conf_dest: /etc/nginx/sites-available/{{ nginx_app_name }}.conf
+...
